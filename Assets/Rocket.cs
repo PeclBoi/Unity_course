@@ -4,9 +4,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Rocket : MonoBehaviour {
-    // Start is called before the first frame update
-    void Start() {
+   
+    Rigidbody rigidBody;
 
+    void Start() {
+        rigidBody = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -32,10 +34,10 @@ public class Rocket : MonoBehaviour {
         print("rotate left");
     }
     private void RotateRight() {
-        print("rotate right");
+        rigidBody.AddRelativeForce(Vector3.right);
     }
     private void ThrustRocket() {
-        print("Thrusting");
+        rigidBody.AddRelativeForce(Vector3.up);
     }
 }
 
