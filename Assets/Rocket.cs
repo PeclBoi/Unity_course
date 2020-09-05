@@ -16,27 +16,39 @@ public class Rocket : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-        ProcessInput();
+        UpdateMovement();
+        UpdateRocketSoundEffects();
+    }
+
+    private void UpdateMovement() {
+        RotateRocket();
+        MoveRocketIfThrusting();
     }
 
 
-    private void ProcessInput() {
+    private void RotateRocket() {
 
+        rigidBody.freezeRotation = true;
+
+        setEulerAngleRotationXAndYTo(0, 0);
         if (RocketDirection.isRotatingLeft()) {
             RotateLeft();
         }
         else if (RocketDirection.isRotatingRight()) {
             RotateRight();
         }
-        if (RocketDirection.isThrusting()) {
-            rocketsSoundeffect.StartThrustSoundeffect();
-            ThrustRocket();
-        }
-        else {
-            rocketsSoundeffect.StopThrustSoundeffect();
-        }
+
+        rigidBody.freezeRotation = false;
     }
 
+    //TODO review name later
+    private void setEulerAngleRotationXAndYTo(int x, int y) {
+        gameObject.transform.eulerAngles = new Vector3(
+            x,
+            y,
+            gameObject.transform.eulerAngles.z
+            );
+    }
 
     private void RotateLeft() {
         transform.Rotate(Vector3.forward);
@@ -46,8 +58,23 @@ public class Rocket : MonoBehaviour {
         transform.Rotate(Vector3.back);
     }
 
-    private void ThrustRocket() {
-        rigidBody.AddRelativeForce(Vector3.up);
+    private void MoveRocketIfThrusting() {
+        if (RocketDirection.isThrusting()) {
+            rigidBody.AddRelativeForce(Vector3.up);
+        }
+    }
+
+    private void UpdateRocketSoundEffects() {
+        ThrustingSoundeffect();
+    }
+
+    private void ThrustingSoundeffect() {
+        if (RocketDirection.isThrusting()) {
+            rocketsSoundeffect.StartThrustSoundeffect();
+        }
+        else {
+            rocketsSoundeffect.StopThrustSoundeffect();
+        }
     }
 }
 
