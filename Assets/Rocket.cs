@@ -2,13 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Assets;
 
 public class Rocket : MonoBehaviour {
-   
+
     Rigidbody rigidBody;
+    RocketsSoundeffect rocketsSoundeffect;
 
     void Start() {
         rigidBody = GetComponent<Rigidbody>();
+        rocketsSoundeffect = new RocketsSoundeffect(GetComponent<AudioSource>());
     }
 
     // Update is called once per frame
@@ -26,16 +29,23 @@ public class Rocket : MonoBehaviour {
             RotateRight();
         }
         if (RocketDirection.isThrusting()) {
+            rocketsSoundeffect.StartThrustSoundeffect();
             ThrustRocket();
+        }
+        else {
+            rocketsSoundeffect.StopThrustSoundeffect();
         }
     }
 
+
     private void RotateLeft() {
-        print("rotate left");
+        transform.Rotate(Vector3.forward);
     }
+
     private void RotateRight() {
-        rigidBody.AddRelativeForce(Vector3.right);
+        transform.Rotate(Vector3.back);
     }
+
     private void ThrustRocket() {
         rigidBody.AddRelativeForce(Vector3.up);
     }
